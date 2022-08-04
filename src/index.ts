@@ -1,88 +1,66 @@
 import { LoyaltyUser, Permissions } from './enums'
 import { Review, Property } from './interfaces'
+import { reviews, you, properties } from './data'
+import { checkPlural, checkLoyalty, createReviewCard } from './utils'
+import { MainProperty } from './classes'
 
-const reviews: Review[] = [
-   {
-       name: 'Sheila',
-       stars: 5,
-       loyaltyUser: LoyaltyUser.GOLD_USER,
-       date: '01-04-2021'
-   },
-   {
-       name: 'Andrzej',
-       stars: 3,
-       loyaltyUser: LoyaltyUser.BRONZE_USER,
-       date: '28-03-2021'
-   },
-   {
-       name: 'Omar',
-       stars: 4,
-       loyaltyUser: LoyaltyUser.SILVER_USER,
-       date: '27-03-2021',
-   },
-]
+const returningEl = document.querySelector('#returning-user')!
+const userEl = document.querySelector('#user')!
+const mainImageContainer = document.querySelector('.main-image')!
+const mainImage = document.createElement('img')
+const reviewsEl = document.querySelector('#reviews')!
+const reviewsButton = document.querySelector('button')!
+const reviewsHidden = document.querySelector('.reviews')!
+const footerEl = document.querySelector('.footer')!
 
-const you = {
-   firstName: 'Bobby',
-   lastName: 'Brown',
-   permissions: Permissions.ADMIN,
-   isReturning: true,
-   age: 35,
-   stayedAt: ['florida-home', 'oman-flat', 'tokyo-bungalow']
+// nav-bar functionality
+function displayHeaderContents(
+   returning: boolean,
+   name: string
+) {
+   if (returning) returningEl.innerHTML = ' back, '
+   userEl.innerHTML = name
 }
 
-// Array of Properties
-const properties: Property[] = [
-   {
-       image: 'images/colombia-property.jpg',
-       title: 'Colombian Shack',
-       price: 45,
-       location: {
-           firstLine: 'shack 37',
-           city: 'Bogota',
-           code: 45632,
-           country: 'Colombia'
-       },
-       contact: [+112343823978921, 'marywinkle@gmail.com'],
-       isAvailable: true  
-   },
-   {
-       image: 'images/poland-property.jpg',
-       title: 'Polish Cottage',
-       price: 30,
-       location: {
-           firstLine: 'no 23',
-           city: 'Gdansk',
-           code: 343903,
-           country: 'Poland'
-       },
-       contact: [+1298239028490830, 'garydavis@hotmail.com'],
-       isAvailable: false 
-   },
-   {
-       image: 'images/london-property.jpg',
-       title: 'London Flat',
-       price: 25,
-       location: {
-           firstLine: 'flat 15',
-           city: 'London',
-           code: 'SW4 5XW',
-           country: 'United Kingdom',
-       },
-       contact: [+34829374892553, 'andyluger@aol.com'],
-       isAvailable: true
-   },
-   {
-       image: 'images/malaysian-hotel.jpeg',
-       title: 'Malia Hotel',
-       price: 35,
-       location: {
-           firstLine: 'Room 4',
-           city: 'Malia',
-           code: 45334,
-           country: 'Malaysia'
-       },
-       contact: [ +60349822083, 'lee34@gmail.com'],
-       isAvailable: false
-   }
-]
+displayHeaderContents(you.isReturning, you.firstName)
+
+// main property functionality
+const homePageMainProperty = new MainProperty(
+   'images/italian-property.jpg',
+   'Italian House',
+   45, 
+   true
+)
+
+mainImage.setAttribute('src', homePageMainProperty.image)
+mainImageContainer.appendChild(mainImage)
+
+// reviews functionality
+function displayReviewsSummary(reviews: Review[]) {
+   reviewsEl.innerHTML = `
+      ${reviews.length} Review${checkPlural(reviews.length)} 
+      | last reviewed by ${reviews[0].name} ${checkLoyalty(reviews[0].loyaltyUser)}
+   `
+}
+
+displayReviewsSummary(reviews)
+
+function createAndOpenHiddenReviews(reviews: Review[]) {
+   const firstReview = createReviewCard()
+   const secondReview = createReviewCard()
+
+   firstReview.innerHTML = `${reviews[0].stars} stars from ${reviews[0].name}`
+   secondReview.innerHTML = `${reviews[1].stars} stars from ${reviews[1].name}`
+
+   reviewsHidden.appendChild(firstReview)
+   reviewsHidden.appendChild(secondReview)
+   reviewsButton.style.display = 'none'
+}
+
+reviewsButton.addEventListener('click', () => createAndOpenHiddenReviews(reviews))
+
+// footer functionality
+footerEl.innerHTML = `Uman | 08/04 | 24&#xb0`
+
+
+

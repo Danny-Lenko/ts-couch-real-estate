@@ -7,10 +7,11 @@ export interface Review {
    date: string;
 }
 
+export type Price = 25 | 30 | 35 | 40 | 45
 export interface Property {
    image: string;
    title: string;
-   price: number;
+   price: Price;
    location: {
        firstLine: string;
        city: string;
