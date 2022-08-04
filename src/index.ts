@@ -1,9 +1,7 @@
-const reviews: {
-   name: string;
-   stars: number;
-   loyaltyUser: LoyaltyUser.GOLD_USER,
-   date: string;
-}[] = [
+import { LoyaltyUser, Permissions } from './enums'
+import { Review, Property } from './interfaces'
+
+const reviews: Review[] = [
    {
        name: 'Sheila',
        stars: 5,
@@ -34,19 +32,7 @@ const you = {
 }
 
 // Array of Properties
-const properties: {
-   image: string;
-   title: string;
-   price: number;
-   location: {
-       firstLine: string;
-       city: string;
-       code: (string | number);
-       country: string;
-   };
-   contact: (number | string)[];
-   isAvailable: boolean; 
-}[] = [
+const properties: Property[] = [
    {
        image: 'images/colombia-property.jpg',
        title: 'Colombian Shack',
