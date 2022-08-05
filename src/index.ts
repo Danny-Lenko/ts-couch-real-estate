@@ -1,5 +1,4 @@
-import { LoyaltyUser, Permissions } from './enums'
-import { Review, Property } from './interfaces'
+import { Review } from './interfaces'
 import { reviews, you, properties } from './data'
 import { checkPlural, checkLoyalty, createReviewCard } from './utils'
 import { MainProperty } from './classes'
@@ -11,6 +10,7 @@ const mainImage = document.createElement('img')
 const reviewsEl = document.querySelector('#reviews')!
 const reviewsButton = document.querySelector('button')!
 const reviewsHidden = document.querySelector('.reviews')!
+const propertiesEl = document.querySelector('.properties')!
 const footerEl = document.querySelector('.footer')!
 
 // nav-bar functionality
@@ -59,8 +59,41 @@ function createAndOpenHiddenReviews(reviews: Review[]) {
 
 reviewsButton.addEventListener('click', () => createAndOpenHiddenReviews(reviews))
 
+// properties functionality
+const propertiesContent: string = properties.map(property => `
+   <div class='card'>
+      <p>${property.title}</p>
+      <img src=${property.image} alt=${property.title} />
+      <p>${property.price}/night<p>
+   </div>
+`).join('')
+
+propertiesEl.innerHTML = propertiesContent
+
 // footer functionality
-footerEl.innerHTML = `Uman | 08/04 | 24&#xb0`
+let lat: number = 51.509865
+let lon: number = -0.118092
+const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=4a105fc22179d414d598d7fe6e54b716&units=metric`
+
+fetch(url)
+   .then(res => res.json())
+   .then(data => {
+      console.log(data)
+      footerEl.innerHTML = `${data.name} | 08/04 | `
+   })
+   .catch(err => console.log(err))
+
+// footerEl.innerHTML
+
+navigator.geolocation.getCurrentPosition(position => {
+      console.log(position)
+      lat = position.coords.latitude
+      lon = position.coords.longitude
+      footerEl.innerHTML = `${lat}, ${lon} | 08/04 | 24&#xb0`
+})
+
+
+
 
 
 
