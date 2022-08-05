@@ -1,6 +1,6 @@
 import { Review } from './interfaces'
 import { reviews, you, properties } from './data'
-import { checkPlural, checkLoyalty, createReviewCard } from './utils'
+import { checkPlural, checkLoyalty, createReviewCard, getAndDisplayWeather } from './utils'
 import { MainProperty } from './classes'
 
 const returningEl = document.querySelector('#returning-user')!
@@ -73,23 +73,13 @@ propertiesEl.innerHTML = propertiesContent
 // footer functionality
 let lat: number = 51.509865
 let lon: number = -0.118092
-const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=4a105fc22179d414d598d7fe6e54b716&units=metric`
 
-fetch(url)
-   .then(res => res.json())
-   .then(data => {
-      console.log(data)
-      footerEl.innerHTML = `${data.name} | 08/04 | `
-   })
-   .catch(err => console.log(err))
-
-// footerEl.innerHTML
+getAndDisplayWeather(lon, lat, footerEl)
 
 navigator.geolocation.getCurrentPosition(position => {
-      console.log(position)
-      lat = position.coords.latitude
-      lon = position.coords.longitude
-      footerEl.innerHTML = `${lat}, ${lon} | 08/04 | 24&#xb0`
+   lat = position.coords.latitude
+   lon = position.coords.longitude
+   getAndDisplayWeather(lon, lat, footerEl)
 })
 
 
